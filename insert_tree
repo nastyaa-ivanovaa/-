@@ -1,0 +1,28 @@
+//Вставка узла в двоичное дерево поиска
+#include <iostream>
+using namespace std;
+
+struct tree {
+    int item;
+    tree* left;
+    tree* right;
+    tree* parent;
+};
+
+void insert_tree(tree** root, int x, tree* parent) {
+    if (*root == nullptr) {
+        tree* p = new tree;
+        p->item = x;
+        p->left = nullptr;
+        p->right = nullptr;
+        p->parent = parent;
+        *root = p;
+        return;
+    }
+
+    if (x < (*root)->item) {
+        insert_tree(&((*root)->left), x, *root);
+    } else {
+        insert_tree(&((*root)->right), x, *root);
+    }
+}
