@@ -1,0 +1,59 @@
+#include <iostream>
+#include <functional>
+using namespace std;
+
+template <typename T>
+struct tree {
+    T item;
+    tree *left;
+    tree *right;
+    tree(T val) : item(val), left(nullptr), right(nullptr) {}
+};
+
+template <typename T, typename Compare = less<T>>
+tree<T>* search_tree(tree<T>* l, const T& x, Compare cmp = Compare()) {
+    if (l == nullptr) return nullptr;
+    if (!(cmp(x, l->item)) && !(cmp(l->item, x))) return l;
+    if (cmp(x, l->item)) return search_tree(l->left, x, cmp);
+    else return search_tree(l->right, x, cmp);
+}
+
+int main() {
+    // Пример простого дерева из 3 узлов вручную
+    tree<int> root(10);
+    tree<int> left(5);
+    tree<int> right(15);
+    root.left = &left;
+    root.right = &right;
+
+    // Поиск существующих и отсутствующих элементов
+    int keys[] = {5, 10, 15, 20};
+
+    for (int k : keys) {
+        tree<int>* res = search_tree(&root, k);
+        if (res) 
+            cout << "Найден: " << res->item << endl;
+        else 
+            cout << "Не найден: " << k << endl;
+    }
+
+    // Проверка на тип string
+    tree<string> rootStr("m");
+    tree<string> leftStr("a");
+    tree<string> rightStr("z");
+    rootStr.left = &leftStr;
+    rootStr.right = &rightStr;
+
+    string strKeys[] = {"a", "m", "z", "q"};
+
+    for (const auto& k : strKeys) {
+        tree<string>* res = search_tree(&rootStr, k);
+        if (res) 
+            cout << "Found string: " << res->item << endl;
+        else 
+            cout << "Not found string: " << k << endl;
+    }
+
+    return 0;
+}
+
